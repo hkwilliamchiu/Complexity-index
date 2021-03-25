@@ -10,9 +10,10 @@ library(tidyr)
 library(ade4)
 options(scipen = 999)
 rm(list=ls())
-# set working directory to source file location; RStudio as IDE required
+# set working directory to source file location; RStudio required
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
+# files are also available at "https://github.com/hkwilliamchiu/Complexity-index/"
 # Reading descriptor scores
 occ1990dd_ONET_2 <- read.dta("occ1990dd_ONET_2.dta")
 # Reading main results of Caines et al.
@@ -21,8 +22,6 @@ CHK_occupation_level <- read.dta13("CHK_occupation_level.dta")
 ONET_pca_scores_produced <- read.dta13("ONET_pca_scores_produced.dta")
 # Reading titles of occupation by occ1990dd
 occ1990dd_names <- read.dta("occ1990dd_names.dta")
-# Reading estimated factor loadings produced by Caines et al.
-factorloadings <- read.csv("factorloadings.csv", header = FALSE)
 
 #-------------------------------------------------------------------------------
 # Data processing
@@ -46,8 +45,12 @@ occ1990dd_ONET_2 = occ1990dd_ONET_2[, -grep("DEMING_*", colnames(occ1990dd_ONET_
 # Complexity "Score" (Following Equation 1 from Caines et al. not included
 # in their data)
 #-------------------------------------------------------------------------------
+# calculate factor loadings
+WPCA <- dudi.pca(occ1990dd_ONET_2[,grep("^_.*", colnames(occ1990dd_ONET_2))], 
+                 row.w=occ1990dd_ONET_2$weight, scannf=FALSE)
+factorloadings_numeric <- -WPCA[["c1"]][["CS1"]]
+
 # calculate complexity scores as in Equation 1
-factorloadings_numeric = as.numeric(factorloadings[,2])
 complexsco = cbind(rep(0,nrow(occ1990dd_ONET_2)),rep(0,nrow(occ1990dd_ONET_2)))
 
 # note that both the "factorloadings_numeric" and the "occ1990dd_ONET_2" order descriptors

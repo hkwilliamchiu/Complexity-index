@@ -1,5 +1,5 @@
 This code (Complexity Index.R) assess the sensitivity of the measure "complexity index" used in Caines, hoffmann and Kambourov (2017)
-<br/>
+
 Data and code provided by Caines et al
 - 'CHK_occupation_level.dta': Main results of Caines et al.
 - 'occ1990dd_names.dta': Occupation titles
